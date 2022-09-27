@@ -10,11 +10,11 @@
             color: orange;
           "
         >
-          <div>ToDo App</div>
+          <div>Did.Done</div>
           <q-icon name="menu_open" />
           <q-space />
-          <q-icon name="bluetooth" />
-          <q-icon name="signal_wifi_4_bar" />
+          <div style="color: green">v.1.0.0</div>
+          <div>{{}}</div>
           <q-icon name="signal_cellular_4_bar" />
           <div class="gt-xs">100%</div>
           <q-icon name="battery_full" />
@@ -71,7 +71,8 @@
                 </div>
                 <div class="col-2 text-white">
                   <q-btn
-                    rounded
+                    round
+                    color="orange"
                     icon="close"
                     size="sm"
                     @click="deleteTodoItem(index)"
@@ -79,7 +80,8 @@
                 </div>
                 <div class="col-2 text-white">
                   <q-btn
-                    rounded
+                    round
+                    color="orange"
                     icon="edit_note"
                     size="sm"
                     @click="editTodoItem(index)"
@@ -91,11 +93,11 @@
             <div style="height: 5px; width: max-content" />
             <q-separator color="orange" inset />
           </div>
-          <div v-else class="flex flex-center text-white">en exei</div>
+          <div v-else class="flex flex-center text-white">Empty</div>
         </q-scroll-area>
       </div>
     </div>
-    <q-dialog v-model="editToDo">
+    <q-dialog v-model="editToDo" persistent>
       <q-card>
         <div>
           <div
@@ -165,4 +167,43 @@ function saveEditedToDo() {
   editingToDoIndex.value = 0;
   LocalStorage.set("toDoList", todos.value);
 }
+
+// var today = new Date();
+// var date =
+//   today.getDate() +
+//   " / " +
+//   (today.getMonth() + 1) +
+//   " / " +
+//   today.getFullYear();
+
+// document.getElementById("currentDate") = date;
+
+// function startTime() {
+//   var today = new Date();
+//   var hours = today.getHours();
+//   var minutes = today.getMinutes();
+//   var seconds = today.getSeconds();
+
+//   var amPm = "AM";
+//   if (hours > 13) {
+//     amPm = "PM";
+//     hours = hours - 12;
+//   }
+
+//   if (minutes < 10) {
+//     minutes = "0" + minutes;
+//   }
+//   if (seconds < 10) {
+//     seconds = "0" + seconds;
+//   }
+
+//   var time = hours + " : " + minutes + " : " + seconds + "  " + amPm;
+
+//   document.getElementById("currentTime")= time;
+
+//   setTimeout(function () {
+//     startTime();
+//   }, 1000);
+//   document.getElementById("DateTime")= today;
+// }
 </script>
