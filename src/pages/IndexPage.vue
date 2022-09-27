@@ -2,17 +2,29 @@
   <q-page class="flex flex-center background">
     <div>
       <div class="row q-pa-sm flex flex-center">
-        <q-banner
-          rounded
-          class="text-orange"
-          style="background-color: rgba(0, 13, 19, 0.82); width: 500px"
+        <q-bar
+          dense
+          style="
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: orange;
+          "
         >
-          TODO LIST
-        </q-banner>
+          <div>ToDo App</div>
+          <q-icon name="menu_open" />
+          <q-space />
+          <q-icon name="bluetooth" />
+          <q-icon name="signal_wifi_4_bar" />
+          <q-icon name="signal_cellular_4_bar" />
+          <div class="gt-xs">100%</div>
+          <q-icon name="battery_full" />
+          <div>10:00AM</div>
+        </q-bar>
       </div>
+
       <div class="row flex flex-center q-pa-sm">
         <form @submit.prevent="addNewTodo" style="width: 500px; height: 75px">
-          <q-input outlined bottom-slots dark v-model="newTodo">
+          <q-input standout bottom-slots dark v-model="newTodo">
             <template v-slot:append>
               <q-btn
                 round
@@ -28,23 +40,25 @@
       </div>
       <div
         class="row q-pa-sm flex flex-center"
-        style="background-color: rgba(0, 13, 19, 0.82); border-radius: 20px"
+        style="background-color: rgba(0, 0, 0, 0.9); border-radius: 20px"
       >
         <q-scroll-area
           dark
           style="width: 500px; height: calc(100vh - 250px)"
-          class="q-pt-md"
+          class="q-pt-md flex flex-center"
         >
           <div v-if="todos.length > 0">
             <div
               v-for="(todo, index) in todos"
               dark
               :key="index"
-              class="q-ma-md"
-              style="width: 450px; height: 100px"
+              class="q-ma-md my-card"
             >
+              <!-- <q-separator color="orange" inset /> -->
               <div class="row flex flex-center">
-                <div class="col-6 text-white">{{ todo.content }}</div>
+                <div class="col-6 text-white q-pa-md flex">
+                  {{ todo.content }}
+                </div>
                 <div class="col-2">
                   <q-checkbox
                     dark
@@ -73,11 +87,35 @@
                 </div>
               </div>
             </div>
+            <q-separator color="orange" inset />
+            <div style="height: 5px; width: max-content" />
+            <q-separator color="orange" inset />
           </div>
           <div v-else class="flex flex-center text-white">en exei</div>
         </q-scroll-area>
       </div>
     </div>
+    <q-dialog v-model="editToDo">
+      <q-card>
+        <div>
+          <div
+            class="row text-color:white"
+            style="background-color: rgba(0, 0, 0, 0.9)"
+          >
+            <q-input v-model="editToDoInput" type="text" />
+          </div>
+          <div class="row">
+            <q-btn
+              color="orange"
+              icon="check"
+              label="Save"
+              no-caps
+              @click="saveEditedToDo"
+            />
+          </div>
+        </div>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -91,6 +129,9 @@ const todos = ref(
     ? LocalStorage.getItem("toDoList")
     : []
 );
+const editToDo = ref(false);
+const editToDoInput = ref("");
+const editingToDoIndex = ref(0);
 
 function addNewTodo() {
   console.log("! - Form succesfully submitted"), console.log(newTodo.value);
@@ -110,14 +151,18 @@ function deleteTodoItem(index) {
 }
 function editTodoItem(index) {
   console.log("to kanei edit gamw");
-  elementIndex = toDolist.findIndex((obj) => obj.id == 1);
-  console.log("Before update: ", toDolist[elementIndex]);
-  toDolist[elementIndex].name = "Ubuntu";
-  console.log("After update: ", toDolist[elementIndex]);
-  const element = LocalStorage.set("toDoList", todos.value);
+  editToDo.value = true;
+  editingToDoIndex.value = index;
 }
 
 function updateTodoItem() {
+  LocalStorage.set("toDoList", todos.value);
+}
+
+function saveEditedToDo() {
+  todos.value[editingToDoIndex.value].content = editToDoInput;
+  editToDo.value = false;
+  editingToDoIndex.value = 0;
   LocalStorage.set("toDoList", todos.value);
 }
 </script>
